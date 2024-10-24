@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: bancosa_postgres
+    environment:
+      POSTGRES_DB: bancosa_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Zuu13021@
+    ports:
+      - '5433:5433'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
