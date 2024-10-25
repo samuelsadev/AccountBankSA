@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: bancosa_db
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Zuu13021@
+      POSTGRES_PASSWORD: 123456
     ports:
       - '5433:5432'
     volumes:
