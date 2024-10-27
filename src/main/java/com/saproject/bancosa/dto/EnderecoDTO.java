@@ -1,11 +1,11 @@
-package com.saproject.bancosa.model;
+package com.saproject.bancosa.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Endereco {
+public class EnderecoDTO {
 
     private String cep;
     private String logradouro;
