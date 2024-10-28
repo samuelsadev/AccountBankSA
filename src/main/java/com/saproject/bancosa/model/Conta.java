@@ -1,18 +1,20 @@
 package com.saproject.bancosa.model;
 
-import com.saproject.bancosa.service.ViaCepService;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "contas")
+@Table(name = "contas", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "cpf"),
+        @UniqueConstraint(columnNames = "rg"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class Conta {
 
     @Id
@@ -44,6 +46,20 @@ public class Conta {
     private String cep;
 
     private String endereco;
+
+    @Enumerated(EnumType.STRING)
+    private TipoConta tipoConta;
+
+    private double saldo = 0.0;
+
     private boolean ativo = true;
 
+    public boolean podeRealizarOperacao() {
+        return ativo && saldo > 0;
+    }
+
+
+    public enum TipoConta {
+        CORRENTE, POUPANCA
+    }
 }

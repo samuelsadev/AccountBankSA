@@ -1,7 +1,8 @@
 package com.saproject.bancosa.controller;
 
+import com.saproject.bancosa.dto.ContaDTO;
+import com.saproject.bancosa.dto.LoginResponseDTO;
 import com.saproject.bancosa.model.Conta;
-import com.saproject.bancosa.repository.ContaRepository;
 import com.saproject.bancosa.service.ContaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ContaController {
 
     @Autowired
-    ContaService contaService;
-
-    @Autowired
-    ContaRepository contaRepository;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Conta> getById(@PathVariable long id) {
-        return contaRepository.findById(id)
-                .map(resposta -> ResponseEntity.ok(resposta))
-                .orElse(ResponseEntity.notFound().build());
-    }
+    private ContaService contaService;
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Conta> postConta(@RequestBody @Valid Conta conta) {
@@ -34,18 +25,37 @@ public class ContaController {
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
-    @PutMapping("/atualizar")
-    public ResponseEntity<Conta> putConta(@RequestBody @Valid Conta conta) {
-        return contaService.atualizarConta(conta)
-                .map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid ContaDTO contaDTO) {
+        LoginResponseDTO response = contaService.autenticarConta(contaDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Conta> getContaPorId(@PathVariable Long id) {
+        return contaService.findById(id)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<?> deleteConta(@PathVariable Long id) {
-        return contaService.deletarConta(id)
-                ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @PutMapping("/alterar-status/{id}")
+    public ResponseEntity<Conta> alterarStatus(@PathVariable Long id, @RequestParam boolean ativo) {
+        return contaService.alterarStatus(id, ativo)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @PutMapping("/depositar/{id}")
+    public ResponseEntity<Conta> depositar(@PathVariable Long id, @RequestParam double valor) {
+        return contaService.depositar(id, valor)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @PutMapping("/sacar/{id}")
+    public ResponseEntity<Conta> sacar(@PathVariable Long id, @RequestParam double valor) {
+        return contaService.sacar(id, valor)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
 }
