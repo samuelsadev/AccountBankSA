@@ -31,6 +31,13 @@ public class ContaController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Conta> getContaPorId(@PathVariable Long id) {
+        return contaService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
     @PutMapping("/alterar-status/{id}")
     public ResponseEntity<Conta> alterarStatus(@PathVariable Long id, @RequestParam boolean ativo) {
         return contaService.alterarStatus(id, ativo)

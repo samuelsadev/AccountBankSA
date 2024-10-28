@@ -24,14 +24,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthFilter authFilter; // Seu filtro JWT
+    private JwtAuthFilter authFilter;
 
     @Autowired
-    private UserDetailsService userDetailsService; // O UserDetailsService que você implementou
+    private UserDetailsService userDetailsService;
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usando BCrypt para criptografar senhas
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -52,17 +52,17 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Sem estado para API REST
-                .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
-                .cors(withDefaults()); // Permite CORS
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults());
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll() // Permite cadastro sem autenticação
-                        .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll() // Permite login sem autenticação
-                        .anyRequest().authenticated()) // Qualquer outro requer autenticação
-                .authenticationProvider(authenticationProvider()) // Adiciona o provider de autenticação
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class); // Adiciona seu filtro JWT
+                        .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
+                        .anyRequest().authenticated())
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

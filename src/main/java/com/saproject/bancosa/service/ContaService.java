@@ -4,7 +4,6 @@ import com.saproject.bancosa.dto.ContaDTO;
 import com.saproject.bancosa.dto.LoginResponseDTO;
 import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.repository.ContaRepository;
-import com.saproject.bancosa.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,32 +33,31 @@ public class ContaService {
     }
 
     public LoginResponseDTO autenticarConta(ContaDTO contaDTO) {
-        // Autentica as credenciais fornecidas
         var credenciais = new UsernamePasswordAuthenticationToken(contaDTO.getEmailOuCpf(), contaDTO.getSenha());
         Authentication authentication = authenticationManager.authenticate(credenciais);
 
         if (authentication.isAuthenticated()) {
-            // Busca a conta usando email ou CPF
             Conta conta = contaRepository.findByEmailOrCpf(contaDTO.getEmailOuCpf(), contaDTO.getEmailOuCpf())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Conta não encontrada."));
 
-            // Gera o token e retorna junto com a informação da conta
             String token = "Bearer " + jwtService.generateToken(conta.getEmail());
-            return new LoginResponseDTO(token, conta); // Retorna o token e os detalhes da conta
+            return new LoginResponseDTO(token, conta);
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Credenciais inválidas.");
         }
     }
 
     public Optional<Conta> realizarLogin(String cpfOuEmail, String senha) {
-        // Busca a conta e compara a senha
         return contaRepository.findByEmailOrCpf(cpfOuEmail, cpfOuEmail)
                 .filter(conta -> passwordEncoder.matches(senha, conta.getSenha()));
     }
 
     private String criptografarSenha(String senha) {
-        // Criptografa a senha usando BCrypt
         return passwordEncoder.encode(senha);
+    }
+
+    public Optional<Conta> findById(Long id) {
+        return contaRepository.findById(id);
     }
 
     public Optional<Conta> atualizarConta(Conta conta) {

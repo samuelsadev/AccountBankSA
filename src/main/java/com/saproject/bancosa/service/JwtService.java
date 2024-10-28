@@ -1,4 +1,4 @@
-package com.saproject.bancosa.security;
+package com.saproject.bancosa.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,8 +14,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Use uma chave secreta adequada, mantenha-a em um local seguro
-    private static final String SECRET = "af4512160de891b7d86fe3c12ba06e00d0cf2b1b1fdfeca51349b1a96d36ec39"; // Substitua por uma chave real e segura
+    private static final String SECRET = "af4512160de891b7d86fe3c12ba06e00d0cf2b1b1fdfeca51349b1a96d36ec39";
 
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());

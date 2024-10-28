@@ -2,6 +2,7 @@ package com.saproject.bancosa.security;
 
 import java.io.IOException;
 
+import com.saproject.bancosa.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,10 +27,10 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
-    private com.saproject.bancosa.security.JwtService jwtService; // Serviço para manipulação do JWT
+    private JwtService jwtService;
 
     @Autowired
-    private UserDetailsService userDetailsService; // Seu UserDetailsService que carrega usuários
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,8 +41,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         try {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                token = authHeader.substring(7); // Remove o prefixo "Bearer "
-                username = jwtService.extractUsername(token); // Extrai o username do token
+                token = authHeader.substring(7);
+                username = jwtService.extractUsername(token);
             }
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -51,13 +52,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken); // Define o contexto de segurança
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-            filterChain.doFilter(request, response); // Continua o filtro
+            filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-            response.setStatus(HttpStatus.FORBIDDEN.value()); // Retorna 403 se o token não for válido
+            response.setStatus(HttpStatus.FORBIDDEN.value());
             return;
         } catch (ResponseStatusException e) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
