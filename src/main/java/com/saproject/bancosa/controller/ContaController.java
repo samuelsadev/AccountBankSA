@@ -58,4 +58,13 @@ public class ContaController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Conta> atualizarConta(@PathVariable Long id, @RequestBody Conta conta) {
+        conta.setId(id);
+
+        return contaService.atualizarConta(conta)
+                .map(contaAtualizada -> ResponseEntity.ok().body(contaAtualizada))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

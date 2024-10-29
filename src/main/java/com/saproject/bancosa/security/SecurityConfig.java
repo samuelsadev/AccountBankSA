@@ -61,6 +61,9 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/contas/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/contas/alterar-status/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/contas/depositar/{id}").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

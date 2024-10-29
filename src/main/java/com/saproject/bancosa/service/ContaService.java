@@ -55,10 +55,10 @@ public class ContaService {
         }
     }
 
-    public Optional<Conta> realizarLogin(String cpfOuEmail, String senha) {
-        return contaRepository.findByEmailOrCpf(cpfOuEmail, cpfOuEmail)
-                .filter(conta -> passwordEncoder.matches(senha, conta.getSenha()));
-    }
+//    public Optional<Conta> realizarLogin(String cpfOuEmail, String senha) {
+//        return contaRepository.findByEmailOrCpf(cpfOuEmail, cpfOuEmail)
+//                .filter(conta -> passwordEncoder.matches(senha, conta.getSenha()));
+//    }
 
     private String criptografarSenha(String senha) {
         return passwordEncoder.encode(senha);
@@ -75,8 +75,13 @@ public class ContaService {
                     existingConta.setEmail(conta.getEmail());
                     existingConta.setTelefone(conta.getTelefone());
                     existingConta.setCep(conta.getCep());
-                    return Optional.of(contaRepository.save(existingConta));
-                }).orElse(Optional.empty());
+                    existingConta.setIdade(conta.getIdade());
+                    existingConta.setSenha(conta.getSenha());
+                    existingConta.setTipoConta(conta.getTipoConta());
+                    existingConta.setSaldo(conta.getSaldo());
+                    existingConta.setAtivo(conta.isAtivo());
+                    return contaRepository.save(existingConta);
+                });
     }
 
     public boolean deletarConta(Long id) {
@@ -88,6 +93,9 @@ public class ContaService {
     }
 
     public Optional<Conta> depositar(Long id, double valor) {
+        if (valor <= 0) {
+            return Optional.empty();
+        }
         return contaRepository.findById(id)
                 .filter(Conta::podeRealizarOperacao)
                 .map(conta -> {
@@ -95,6 +103,7 @@ public class ContaService {
                     return contaRepository.save(conta);
                 });
     }
+
 
     public Optional<Conta> sacar(Long id, double valor) {
         return contaRepository.findById(id)
@@ -112,7 +121,8 @@ public class ContaService {
         return contaRepository.findById(id)
                 .map(conta -> {
                     conta.setAtivo(ativo);
-                    return contaRepository.save(conta);
+                    contaRepository.save(conta);
+                    return conta;
                 });
     }
 }
