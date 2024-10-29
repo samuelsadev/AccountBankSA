@@ -5,6 +5,7 @@ import com.saproject.bancosa.dto.LoginResponseDTO;
 import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,9 +25,16 @@ public class ContaService {
     private final AuthenticationManager authenticationManager;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
+    private ViaCepService viaCepService;
+
     public Optional<Conta> cadastrarConta(Conta conta) {
         if (contaRepository.findByEmailOrCpf(conta.getEmail(), conta.getCpf()).isPresent()) {
             return Optional.empty();
+        }
+        var endereco = viaCepService.buscarEnderecoPorCep(conta.getCep());
+        if (endereco != null) {
+            conta.setEndereco(endereco.toString());
         }
         conta.setSenha(criptografarSenha(conta.getSenha()));
         return Optional.of(contaRepository.save(conta));
