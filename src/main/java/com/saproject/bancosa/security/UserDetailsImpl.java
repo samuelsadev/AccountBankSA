@@ -17,7 +17,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // Pode-se adicionar roles aqui
+        return Collections.emptyList();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return conta.getEmail(); // Utiliza email como padrão
+        return conta.getEmail();
     }
 
     public String getCpf() {

@@ -1,5 +1,6 @@
 package com.saproject.bancosa.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class Conta {
 
     @Min(value = 0, message = "Idade deve ser um número positivo.")
     private int idade;
-
+    @Schema(example = "email@email.com.br")
     @Email(message = "Email deve ser válido.")
     private String email;
 
