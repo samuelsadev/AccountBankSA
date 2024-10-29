@@ -58,4 +58,12 @@ public class ContaController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarConta(@PathVariable Long id) {
+        if (contaService.deletarConta(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
