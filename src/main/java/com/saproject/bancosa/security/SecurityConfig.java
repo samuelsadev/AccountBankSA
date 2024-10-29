@@ -58,7 +58,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Permitir acesso ao Swagger
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
                         .anyRequest().authenticated())
