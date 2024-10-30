@@ -37,7 +37,22 @@ public class ContaService {
             conta.setEndereco(endereco.toString());
         }
         conta.setSenha(criptografarSenha(conta.getSenha()));
+        conta.setNumeroConta(gerarNumeroContaUnico());
         return Optional.of(contaRepository.save(conta));
+    }
+
+    private String gerarNumeroContaUnico() {
+        String numeroConta;
+        do {
+            numeroConta = gerarNumeroConta();
+        } while (contaRepository.existsByNumeroConta(numeroConta));
+        return numeroConta;
+    }
+
+    private String gerarNumeroConta() {
+        int numero = (int) (Math.random() * 1000000);
+        int digito = (int) (Math.random() * 10);
+        return String.format("%06d-%d", numero, digito);
     }
 
     public LoginResponseDTO autenticarConta(ContaDTO contaDTO) {
@@ -55,10 +70,10 @@ public class ContaService {
         }
     }
 
-//    public Optional<Conta> realizarLogin(String cpfOuEmail, String senha) {
-//        return contaRepository.findByEmailOrCpf(cpfOuEmail, cpfOuEmail)
-//                .filter(conta -> passwordEncoder.matches(senha, conta.getSenha()));
-//    }
+    public Optional<Conta> realizarLogin(String cpfOuEmail, String senha) {
+        return contaRepository.findByEmailOrCpf(cpfOuEmail, cpfOuEmail)
+                .filter(conta -> passwordEncoder.matches(senha, conta.getSenha()));
+    }
 
     private String criptografarSenha(String senha) {
         return passwordEncoder.encode(senha);
