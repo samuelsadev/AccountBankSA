@@ -20,9 +20,10 @@ Desenvolvi uma API em Java para cadastrar contas bancarias, consumindo uma API q
 
 **Imagens**
 
-  <img src="img/CadastroJson.png" alt="CRUD" width="600"/>
-  <img src="img/LoginJson.png" alt="CRUD" width="600"/>
-  <img src="img/CrudSwagger.png" alt="CRUD" width="600"/>
+  <img src="img/CadastroContaJson.png" alt="CRUD" width="600"/>
+  <img src="img/AutenticarContaJson.png" alt="CRUD" width="600"/>
+  <img src="img/AtualizarContaJson.png" alt="CRUD" width="600"/>
+  <img src="img/CRUDContas.png" alt="CRUD" width="600"/>
 <img src="img/DadosSwagger.png" alt="CRUD" width="600"/>
 
 
