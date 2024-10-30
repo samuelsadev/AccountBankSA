@@ -22,6 +22,9 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private final String agencia = "1321";
+    private String numeroConta;
+
     @NotBlank(message = "Nome é obrigatório.")
     private String nome;
 
