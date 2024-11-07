@@ -18,6 +18,9 @@ Desenvolvi uma API em **Java** com **Spring** para cadastrar contas bancarias, c
 - Integração com APIs externas
 - Validação de dados
 
+Intalção do projeto com o seguinte comando no terminal: docker-compose up -d
+
+
 **Imagens**
 
   <img src="img/CadastroContaJson.png" alt="CRUD" width="600"/>
