@@ -1,7 +1,8 @@
-package com.saproject.bancosa.security;
+package com.saproject.bancosa.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.saproject.bancosa.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.saproject.bancosa.service;
+package com.saproject.bancosa.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
