@@ -52,20 +52,21 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
-                .cors(withDefaults());
 
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/contas/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/contas/alterar-status/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/contas/depositar/{id}").permitAll()
-                        .anyRequest().authenticated())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/contas/{id}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/contas/alterar-status/{id}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/contas/depositar/{id}").permitAll()
+                                .anyRequest().authenticated()
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
