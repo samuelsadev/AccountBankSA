@@ -1,8 +1,6 @@
 package com.saproject.bancosa.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "contas", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "cpf"),
-        @UniqueConstraint(columnNames = "rg"),
-        @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "contas")
 public class Conta {
 
     @Id
@@ -25,31 +19,9 @@ public class Conta {
     private final String agencia = "1321";
     private String numeroConta;
 
-    @NotBlank(message = "Nome é obrigatório.")
-    private String nome;
-
-    @Min(value = 0, message = "Idade deve ser um número positivo.")
-    private int idade;
-    @Schema(example = "email@email.com.br")
-    @Email(message = "Email deve ser válido.")
-    private String email;
-
-    @NotBlank(message = "Senha é obrigatória.")
-    private String senha;
-
-    @NotBlank(message = "CPF é obrigatório.")
-    private String cpf;
-
-    @NotBlank(message = "RG é obrigatório.")
-    private String rg;
-
-    @NotBlank(message = "Telefone é obrigatório.")
-    private String telefone;
-
-    @NotBlank(message = "CEP é obrigatório.")
-    private String cep;
-
-    private String endereco;
+    @OneToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
     @Enumerated(EnumType.STRING)
     private TipoConta tipoConta;
@@ -61,7 +33,6 @@ public class Conta {
     public boolean podeRealizarOperacao() {
         return ativo && saldo > 0;
     }
-
 
     public enum TipoConta {
         CORRENTE, POUPANCA
