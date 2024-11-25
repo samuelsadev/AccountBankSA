@@ -1,6 +1,6 @@
-package com.saproject.bancosa.model;
+package com.saproject.bancosa.dto;
 
-public class UsuarioLogin {
+public class UsuarioDTO {
 
     private Long id;
     private String nome;
