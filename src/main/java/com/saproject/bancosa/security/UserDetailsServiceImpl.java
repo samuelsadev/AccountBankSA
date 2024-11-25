@@ -1,14 +1,12 @@
 package com.saproject.bancosa.security;
 
-import com.saproject.bancosa.model.Conta;
-import com.saproject.bancosa.repository.ContaRepository;
+import com.saproject.bancosa.model.Usuario;
+import com.saproject.bancosa.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -16,16 +14,15 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private ContaRepository contaRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String emailOuCpf) throws UsernameNotFoundException {
-        Optional<Conta> conta = contaRepository.findByEmailOrCpf(emailOuCpf, emailOuCpf);
-
-        if (conta.isPresent()) {
-            return new UserDetailsImpl(conta.get());
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Usuario> usuario = usuarioRepository.findByEmailOrCpf(username, username);
+        if (usuario.isPresent()) {
+            return new UserDetailsImpl(usuario.get());
         } else {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Conta não encontrada.");
+            throw new UsernameNotFoundException("Usuário não encontrado com o username: " + username);
         }
     }
 }

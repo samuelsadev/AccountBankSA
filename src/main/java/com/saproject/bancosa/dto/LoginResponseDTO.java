@@ -1,12 +1,15 @@
 package com.saproject.bancosa.dto;
 
-import com.saproject.bancosa.model.Conta;
-import lombok.AllArgsConstructor;
+import com.saproject.bancosa.model.Usuario;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class LoginResponseDTO {
     private String token;
-    private Conta conta;
+    private Usuario usuario;
+
+    public LoginResponseDTO(String token, Usuario usuario) {
+        this.token = token;
+        this.usuario = usuario;
+    }
 }

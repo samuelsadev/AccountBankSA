@@ -1,56 +1,65 @@
 package com.saproject.bancosa.security;
 
-import com.saproject.bancosa.model.Conta;
-import lombok.AllArgsConstructor;
+import com.saproject.bancosa.model.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Collections;
 
-@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    private Conta conta;
+    private String userName;
+    private String password;
+    private List<GrantedAuthority> authorities;
+
+    public UserDetailsImpl(Usuario user) {
+        this.userName = user.getEmail();
+        this.password = user.getSenha();
+        this.authorities = Collections.emptyList();
+    }
+
+    public UserDetailsImpl() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return conta.getSenha();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return conta.getEmail();
-    }
-
-    public String getCpf() {
-        return conta.getCpf();
+        return userName;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return conta.isAtivo();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return conta.isAtivo();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return conta.isAtivo();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return conta.isAtivo();
+        return true;
+    }
+
+    public static UserDetailsImpl build(Usuario user) {
+        return new UserDetailsImpl(user);
     }
 }

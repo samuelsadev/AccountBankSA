@@ -2,7 +2,7 @@ package com.saproject.bancosa.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import com.saproject.bancosa.security.JwtAuthFilter;
+import com.saproject.bancosa.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +22,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class BasicSecurityConfig {
 
     @Autowired
-    private JwtAuthFilter authFilter;
+    private com.generation.blogpessoal.security.JwtAuthFilter authFilter;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    @Bean
+    UserDetailsService userDetailsService() {
+
+        return new UserDetailsServiceImpl();
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
@@ -38,7 +41,7 @@ public class SecurityConfig {
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
@@ -51,24 +54,23 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(withDefaults())
-                .csrf(csrf -> csrf.disable())
 
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/contas/cadastrar").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/contas/login").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/contas/{id}").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/contas/alterar-status/{id}").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/contas/depositar/{id}").permitAll()
-                                .anyRequest().authenticated()
-                )
+        http
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults());
+
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/usuarios/logar").permitAll()
+                        .requestMatchers("/usuarios/cadastrar").permitAll()
+                        .requestMatchers("/error/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(withDefaults());
 
         return http.build();
     }

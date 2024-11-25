@@ -54,8 +54,7 @@ public class ViaCepService {
             this.uf = uf;
         }
 
-        @Override
-        public String toString() {
+        public String getEnderecoCompleto() {
             return logradouro + ", " + bairro + ", " + localidade + " - " + uf;
         }
     }
