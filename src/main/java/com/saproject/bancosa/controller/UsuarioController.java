@@ -1,11 +1,13 @@
 package com.saproject.bancosa.controller;
 
-import com.saproject.bancosa.dto.LoginResponseDTO;
-import com.saproject.bancosa.dto.ContaDTO;
+import com.saproject.bancosa.dto.LoginResponseDTO;;
+import com.saproject.bancosa.dto.UsuarioDTO;
+import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.model.Usuario;
 import com.saproject.bancosa.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,14 +30,17 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario criarUsuario(@Valid @RequestBody Usuario usuario) {
-        return usuarioService.criarUsuario(usuario);
+    public Usuario criarUsuario(@Valid @RequestBody Usuario usuario, @RequestParam(required = false) String tipoConta) {
+        return usuarioService.criarUsuarioComConta(usuario,
+                tipoConta != null ? Conta.TipoConta.valueOf(tipoConta.toUpperCase()) : Conta.TipoConta.CORRENTE);
     }
 
     @PostMapping("/login")
-    public LoginResponseDTO autenticarUsuario(@RequestBody ContaDTO contaDTO) {
-        return usuarioService.autenticarUsuario(contaDTO);
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody UsuarioDTO usuarioDTO) {
+        LoginResponseDTO response = usuarioService.autenticarUsuario(usuarioDTO);
+        return ResponseEntity.ok(response);
     }
+
 
     @PutMapping("/{id}")
     public Usuario atualizarUsuario(@PathVariable Long id, @Valid @RequestBody Usuario usuarioAtualizado) {
