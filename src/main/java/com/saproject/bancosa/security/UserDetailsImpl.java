@@ -18,6 +18,9 @@ public class UserDetailsImpl implements UserDetails {
 
     public UserDetailsImpl(Usuario user) {
         this.userName = user.getEmail();
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            this.userName = user.getCpf();
+        }
         this.password = user.getSenha();
         this.authorities = Collections.emptyList();
     }
