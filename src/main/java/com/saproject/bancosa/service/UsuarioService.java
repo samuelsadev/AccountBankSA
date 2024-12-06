@@ -1,6 +1,5 @@
 package com.saproject.bancosa.service;
 
-import com.saproject.bancosa.dto.ContaDTO;
 import com.saproject.bancosa.dto.LoginResponseDTO;
 import com.saproject.bancosa.dto.UsuarioDTO;
 import com.saproject.bancosa.model.Conta;
@@ -55,18 +54,25 @@ public class UsuarioService {
     }
 
     public LoginResponseDTO autenticarUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioRepository
-                .findByEmailOrCpf(usuarioDTO.getEmailOuCpf(), usuarioDTO.getEmailOuCpf())
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuarioDTO.getEmailOuCpf());
+
+        if (!usuarioOptional.isPresent()) {
+            usuarioOptional = usuarioRepository.findByCpf(usuarioDTO.getEmailOuCpf());
+        }
+
+        Usuario usuario = usuarioOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou senha inválidos"));
 
         if (!passwordEncoder.matches(usuarioDTO.getSenha(), usuario.getSenha())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou senha inválidos");
         }
 
-        String token = jwtService.generateToken(usuario.getEmail()); // Pode usar outro dado único, como ID ou CPF.
+        String token = jwtService.generateToken(usuario.getEmail());
 
         return new LoginResponseDTO(token, usuario);
     }
+
 
 
     private String gerarNumeroContaUnico() {
