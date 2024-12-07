@@ -22,12 +22,21 @@ public class UsuarioService {
     private final ContaRepository contaRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final ViaCepService viaCepService;
 
     public Optional<Usuario> buscarPorId(Long id) {
         return usuarioRepository.findById(id);
     }
 
     public Usuario criarUsuarioComConta(Usuario usuario, Conta.TipoConta tipoConta) {
+
+        if (usuario.getCep() != null && !usuario.getCep().isEmpty()) {
+            ViaCepService.Endereco endereco = viaCepService.buscarEnderecoPorCep(usuario.getCep());
+            if (endereco != null) {
+                usuario.setEndereco(endereco.getEnderecoCompleto());
+            }
+        }
+
         Usuario novoUsuario = usuarioRepository.save(usuario);
 
         Conta conta = new Conta();
@@ -55,16 +64,16 @@ public class UsuarioService {
 
     public LoginResponseDTO autenticarUsuario(UsuarioDTO usuarioDTO) {
 
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuarioDTO.getEmailOuCpf());
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(usuarioDTO.emailOuCpf());
 
         if (!usuarioOptional.isPresent()) {
-            usuarioOptional = usuarioRepository.findByCpf(usuarioDTO.getEmailOuCpf());
+            usuarioOptional = usuarioRepository.findByCpf(usuarioDTO.emailOuCpf());
         }
 
         Usuario usuario = usuarioOptional
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou senha inválidos"));
 
-        if (!passwordEncoder.matches(usuarioDTO.getSenha(), usuario.getSenha())) {
+        if (!passwordEncoder.matches(usuarioDTO.senha(), usuario.getSenha())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou senha inválidos");
         }
 

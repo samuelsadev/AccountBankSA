@@ -2,6 +2,7 @@ package com.saproject.bancosa.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.saproject.bancosa.security.JwtAuthFilter;
 import com.saproject.bancosa.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class BasicSecurityConfig {
 
     @Autowired
-    private com.generation.blogpessoal.security.JwtAuthFilter authFilter;
+    private JwtAuthFilter authFilter;
 
     @Bean
     UserDetailsService userDetailsService() {
