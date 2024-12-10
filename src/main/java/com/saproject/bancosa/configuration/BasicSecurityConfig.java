@@ -64,6 +64,7 @@ public class BasicSecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers("/api/usuarios").permitAll()
                         .requestMatchers("/error/**").permitAll()
