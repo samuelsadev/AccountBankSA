@@ -23,11 +23,11 @@ Intalção do projeto com o seguinte comando no terminal: **docker-compose up -d
 
 **Imagens**
 
-  <img src="img/CadastroContaJson.png" alt="CRUD" width="600"/>
-  <img src="img/AutenticarContaJson.png" alt="CRUD" width="600"/>
-  <img src="img/AtualizarContaJson.png" alt="CRUD" width="600"/>
-  <img src="img/CRUDContas.png" alt="CRUD" width="600"/>
-<img src="img/DadosSwagger.png" alt="CRUD" width="600"/>
+  <img src="img/CadastroUsuario.png" alt="CRUD" width="600"/>
+  <img src="img/AutenticarUsuario.png" alt="CRUD" width="600"/>
+  <img src="img/AtualizarUsuario.png" alt="CRUD" width="600"/>
+  <img src="img/CRUDSwagger.png" alt="CRUD" width="600"/>
+<img src="img/RequisicoesSwagger.png" alt="CRUD" width="600"/>
 <img src="img/ContainerDocker.png" alt="CRUD" width="600"/>
 
 
