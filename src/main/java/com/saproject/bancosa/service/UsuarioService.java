@@ -58,11 +58,16 @@ public class UsuarioService {
                 .map(usuario -> {
                     usuario.setNome(usuarioAtualizado.getNome());
                     usuario.setEmail(usuarioAtualizado.getEmail());
-                    usuario.setSenha(usuarioAtualizado.getSenha());
+
+                    if (!usuarioAtualizado.getSenha().equals(usuario.getSenha())) {
+                        usuario.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
+                    }
+
                     return usuarioRepository.save(usuario);
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
     }
+
 
     public LoginResponseDTO autenticarUsuario(UsuarioDTO usuarioDTO) {
 
