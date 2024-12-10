@@ -3,7 +3,7 @@ package com.saproject.bancosa.configuration;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.saproject.bancosa.security.JwtAuthFilter;
-import com.saproject.bancosa.security.UserDetailsServiceImpl;
+import com.saproject.bancosa.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,8 +64,8 @@ public class BasicSecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/usuarios/logar").permitAll()
-                        .requestMatchers("/usuarios/cadastrar").permitAll()
+                        .requestMatchers("/api/usuarios/login").permitAll()
+                        .requestMatchers("/api/usuarios").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated())

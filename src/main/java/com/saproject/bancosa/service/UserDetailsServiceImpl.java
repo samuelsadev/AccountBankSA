@@ -1,7 +1,8 @@
-package com.saproject.bancosa.security;
+package com.saproject.bancosa.service;
 
 import com.saproject.bancosa.model.Usuario;
 import com.saproject.bancosa.repository.UsuarioRepository;
+import com.saproject.bancosa.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

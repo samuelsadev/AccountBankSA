@@ -3,6 +3,7 @@ package com.saproject.bancosa.security;
 import java.io.IOException;
 
 import com.saproject.bancosa.service.JwtService;
+import com.saproject.bancosa.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        try {
+        try{
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 token = authHeader.substring(7);
                 username = jwtService.extractUsername(token);
@@ -56,11 +57,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
+
             }
             filterChain.doFilter(request, response);
 
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException
-                 | SignatureException | ResponseStatusException e) {
+        }catch(ExpiredJwtException | UnsupportedJwtException | MalformedJwtException
+               | SignatureException | ResponseStatusException e){
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return;
         }

@@ -37,6 +37,8 @@ public class UsuarioService {
             }
         }
 
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+
         Usuario novoUsuario = usuarioRepository.save(usuario);
 
         Conta conta = new Conta();
