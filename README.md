@@ -3,7 +3,7 @@
 ## Descrição do Projeto
 Desenvolvi uma API em **Java** com **Spring** para cadastrar contas bancarias, consumindo uma API que gera o endereço a partir do CEP inserido, além disso fiz um sistema de autenticação com **Spring Security**, tanto a API quanto o banco de dados estão em um container no **Docker**.
 
-Intalção do projeto no Docker, com o seguinte comando no terminal bash: **docker-compose up -d**
+Intalção do projeto no docker-compose, com o seguinte comando no terminal bash: **docker-compose up -d**
 
 
 ## Tecnologias Utilizadas
