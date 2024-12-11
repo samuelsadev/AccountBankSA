@@ -68,6 +68,8 @@ public class BasicSecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/usuarios/login").permitAll()
                         .requestMatchers("/api/usuarios").permitAll()
+                        .requestMatchers("/contas/depositar/{id}").permitAll()
+                        .requestMatchers("/contas/sacar/{id}").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated())

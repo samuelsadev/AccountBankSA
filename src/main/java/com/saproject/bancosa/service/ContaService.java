@@ -1,7 +1,9 @@
 package com.saproject.bancosa.service;
 
+import com.saproject.bancosa.dto.ContaDTO;
 import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.repository.ContaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,29 +17,31 @@ public class ContaService {
 
     private final ContaRepository contaRepository;
 
-    public Optional<Conta> depositar(Long id, double valor) {
-        if (valor <= 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valor de depósito deve ser positivo.");
+    public Conta depositar(ContaDTO contaDTO, Long id) {
+
+        if (contaDTO.saldo() <= 0) {
+            throw new IllegalArgumentException("O valor do depósito deve ser positivo.");
         }
 
-        return contaRepository.findById(id)
-                .filter(Conta::podeRealizarOperacao)
-                .map(conta -> {
-                    conta.setSaldo(conta.getSaldo() + valor);
-                    return contaRepository.save(conta);
-                });
+        Conta conta = contaRepository.findById(id)
+                .filter(Conta::isAtivo)
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada ou inativa."));
+
+        conta.setSaldo(conta.getSaldo() + contaDTO.saldo());
+        return contaRepository.save(conta);
     }
 
-    public Optional<Conta> sacar(Long id, double valor) {
-        return contaRepository.findById(id)
-                .filter(Conta::podeRealizarOperacao)
-                .map(conta -> {
-                    if (conta.getSaldo() < valor) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente.");
-                    }
-                    conta.setSaldo(conta.getSaldo() - valor);
-                    return contaRepository.save(conta);
-                });
+    public Conta sacar(Long id, ContaDTO contaDTO) {
+        Conta conta = contaRepository.findById(id)
+                .filter(Conta::isAtivo)
+                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada ou inativa."));
+
+        if (conta.getSaldo() < contaDTO.saldo()) {
+            throw new IllegalArgumentException("Saldo insuficiente.");
+        }
+
+        conta.setSaldo(conta.getSaldo() - contaDTO.saldo());
+        return contaRepository.save(conta);
     }
 
     public Optional<Conta> alterarStatus(Long id, boolean ativo) {
