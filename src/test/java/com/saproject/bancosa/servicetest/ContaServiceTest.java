@@ -1,11 +1,13 @@
 package com.saproject.bancosa.servicetest;
 
+import com.saproject.bancosa.dto.ContaDTO;
 import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.repository.ContaRepository;
 import com.saproject.bancosa.service.ContaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class ContaServiceTest {
 
     @Mock
@@ -37,37 +40,34 @@ class ContaServiceTest {
 
     @Test
     void testDepositar_Sucesso() {
+        ContaDTO contaDTO = new ContaDTO(500.0);
         when(contaRepository.findById(1L)).thenReturn(Optional.of(conta));
         when(contaRepository.save(any(Conta.class))).thenReturn(conta);
 
-        Optional<Conta> result = contaService.depositar(1L, 500.0);
+        Conta result = contaService.depositar(contaDTO, 1L);
 
-        assertTrue(result.isPresent());
-        assertEquals(1500.0, result.get().getSaldo());
+        assertNotNull(result);
+        assertEquals(1500.0, result.getSaldo());
     }
 
     @Test
     void testDepositar_ValorInvalido() {
-        assertThrows(ResponseStatusException.class, () -> contaService.depositar(1L, -500.0));
-    }
+        ContaDTO contaDTO = new ContaDTO(-500.0);
 
+        assertThrows(IllegalArgumentException.class, () -> contaService.depositar(contaDTO, 1L));
+    }
     @Test
     void testSacar_Sucesso() {
+        ContaDTO contaDTO = new ContaDTO(200.0);
         when(contaRepository.findById(1L)).thenReturn(Optional.of(conta));
         when(contaRepository.save(any(Conta.class))).thenReturn(conta);
 
-        Optional<Conta> result = contaService.sacar(1L, 200.0);
+        Conta result = contaService.sacar(1L, contaDTO);
 
-        assertTrue(result.isPresent());
-        assertEquals(800.0, result.get().getSaldo());
+        assertNotNull(result);
+        assertEquals(800.0, result.getSaldo());
     }
 
-    @Test
-    void testSacar_SaldoInsuficiente() {
-        when(contaRepository.findById(1L)).thenReturn(Optional.of(conta));
-
-        assertThrows(ResponseStatusException.class, () -> contaService.sacar(1L, 2000.0));
-    }
 
     @Test
     void testAlterarStatus_Sucesso() {

@@ -1,6 +1,7 @@
 package com.saproject.bancosa.controllertest;
 
 import com.saproject.bancosa.controller.ContaController;
+import com.saproject.bancosa.dto.ContaDTO;
 import com.saproject.bancosa.model.Conta;
 import com.saproject.bancosa.service.ContaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -66,35 +68,41 @@ class ContaControllerTest {
 
     @Test
     void testDepositar_Sucesso() throws Exception {
-        when(contaService.depositar(1L, 500.0)).thenReturn(java.util.Optional.of(conta));
+        ContaDTO contaDTO = new ContaDTO(500.0);
+        when(contaService.depositar(contaDTO, 1L)).thenReturn(conta);
 
         mockMvc.perform(post("/contas/depositar/{id}", 1L)
-                        .param("valor", "500.0"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"saldo\": 500.0}")) //
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.saldo").value(1500.0));
     }
 
+
     @Test
     void testDepositar_ValorInvalido() throws Exception {
         mockMvc.perform(post("/contas/depositar/{id}", 1L)
-                        .param("valor", "-500.0"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"saldo\": -500.0}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void testSacar_Sucesso() throws Exception {
-        when(contaService.sacar(1L, 200.0)).thenReturn(java.util.Optional.of(conta));
+        ContaDTO contaDTO = new ContaDTO(200.0);
+        when(contaService.sacar(1L, contaDTO)).thenReturn(conta);
 
         mockMvc.perform(post("/contas/sacar/{id}", 1L)
-                        .param("valor", "200.0"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"saldo\": 200.0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.saldo").value(800.0));
     }
 
     @Test
     void testSacar_SaldoInsuficiente() throws Exception {
-        when(contaService.sacar(1L, 2000.0)).thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Saldo insuficiente"));
-
+        ContaDTO contaDTO = new ContaDTO(2000.0);
+        when(contaService.sacar(1L, contaDTO)).thenThrow(new IllegalArgumentException("Saldo insuficiente"));
         mockMvc.perform(post("/contas/sacar/{id}", 1L)
                         .param("valor", "2000.0"))
                 .andExpect(status().isBadRequest())
