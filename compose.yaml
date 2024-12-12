@@ -23,7 +23,7 @@ services:
       SPRING.DATASOURCE.USERNAME: postgres
       SPRING.DATASOURCE.PASSWORD: 123456
     ports:
-      - '8081:8080'
+      - '8083:8080'
     depends_on:
     - postgres
 
