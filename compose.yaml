@@ -3,9 +3,9 @@ version: '3.8'
 services:
   postgres:
     image: postgres:latest
-    container_name: bancosa_postgres
+    container_name: accountbanksa_postgres
     environment:
-      POSTGRES_DB: bancosa_db
+      POSTGRES_DB: accountbanksa_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
     ports:
@@ -13,13 +13,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  bancosa:
-    container_name: BancoSA
+  accountbanksa:
+    container_name: AccountBankSA
     restart: always
     build: .
     environment:
       TZ: America/Sao_Paulo
-      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/bancosa_db
+      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/accountbanksa_db
       SPRING.DATASOURCE.USERNAME: postgres
       SPRING.DATASOURCE.PASSWORD: 123456
     ports:

@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.saproject</groupId>
-	<artifactId>bancosa</artifactId>
+	<artifactId>AccountBankSA</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bancosa</name>
 	<description>API Banco SA</description>
