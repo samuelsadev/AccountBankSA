@@ -70,6 +70,8 @@ public class BasicSecurityConfig {
                         .requestMatchers("/api/user").permitAll()
                         .requestMatchers("/account/deposit/{id}").permitAll()
                         .requestMatchers("/account/withdraw/{id}").permitAll()
+                        .requestMatchers("/account").permitAll()
+                        .requestMatchers("/account/{id}").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated())
