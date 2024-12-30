@@ -67,7 +67,7 @@ public class BasicSecurityConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/uer").permitAll()
+                        .requestMatchers("/api/user").permitAll()
                         .requestMatchers("/account/deposit/{id}").permitAll()
                         .requestMatchers("/account/withdraw/{id}").permitAll()
                         .requestMatchers("/error/**").permitAll()
