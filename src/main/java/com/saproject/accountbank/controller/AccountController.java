@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AccountController {
 
