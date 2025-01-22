@@ -1,6 +1,7 @@
 package com.saproject.accountbank.service;
 
 import com.saproject.accountbank.dto.AccountDTO;
+import com.saproject.accountbank.dto.TransactionDTO;
 import com.saproject.accountbank.model.Account;
 import com.saproject.accountbank.repository.AccountRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -62,4 +63,28 @@ public class AccountService {
         return accountRepository.findById(id);
     }
 
+    public void processTransaction(TransactionDTO transactionDTO) {
+        Account originAccount = accountRepository.findByAccountNumber(transactionDTO.originAccountNumber())
+                .filter(Account::isActive)
+                .orElseThrow(() -> new EntityNotFoundException("Origin account not found or inactive"));
+
+        Account destinationAccount = accountRepository.findByAccountNumber(transactionDTO.destinationAccountNumber())
+                .orElseThrow(() -> new EntityNotFoundException("Destination account not found"));
+
+        if (originAccount.getBalance() < transactionDTO.amount()) {
+            throw new IllegalArgumentException("Insufficient funds in origin account");
+        }
+
+        originAccount.setBalance(originAccount.getBalance() - transactionDTO.amount());
+        destinationAccount.setBalance(destinationAccount.getBalance() + transactionDTO.amount());
+
+        accountRepository.save(originAccount);
+        accountRepository.save(destinationAccount);
+    }
+    public void updateAccountBalance(String accountNumber, AccountDTO accountDTO) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        account.setBalance(accountDTO.balance());
+        accountRepository.save(account);
+    }
 }
