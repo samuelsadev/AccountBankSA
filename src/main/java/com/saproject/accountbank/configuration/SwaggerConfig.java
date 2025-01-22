@@ -16,8 +16,8 @@ public class SwaggerConfig {
     OpenAPI springBancosaOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Projeto BancoSA")
-                        .description("Projeto pessoal - BancoSA")
+                        .title("AccountBankSA project")
+                        .description("Personal project - AccountBankSA")
                         .version("v0.0.1")
                         .contact(new Contact()
                                 .name("Samuel Almeida de Sa")
