@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (usuario.isPresent()) {
             return new UserDetailsImpl(usuario.get());
         } else {
-            throw new UsernameNotFoundException("Usuário não encontrado com o username: " + username);
+            throw new UsernameNotFoundException("User " + username + " not found");
         }
     }
 }

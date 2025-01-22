@@ -4,10 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public record UserDTO(
 
-        @NotBlank(message = "O campo emailOrCpf é obrigatório")
+        @NotBlank(message = "The email or CPF is mandatory")
         String emailOrCpf,
 
-        @NotBlank(message = "O campo password é obrigatório")
+        @NotBlank(message = "The password is mandatory")
         String password
 ) {
 }

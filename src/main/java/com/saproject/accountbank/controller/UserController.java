@@ -23,14 +23,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User visualizarUsuario(@PathVariable Long id) {
+    public User viewUser(@PathVariable Long id) {
         return userService.searchById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!"));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User criarUsuario(@Valid @RequestBody User user, @RequestParam(required = false) String accountType) {
+    public User createUser(@Valid @RequestBody User user, @RequestParam(required = false) String accountType) {
         return userService.creatUserWithAccount(user,
                 accountType != null ? Account.accountType.valueOf(accountType.toUpperCase()) : Account.accountType.CURRENT);
     }
@@ -43,7 +43,7 @@ public class UserController {
 
 
     @PutMapping("/{id}")
-    public User atualizarUsuario(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
         return userService.updateUser(id, updatedUser);
     }
 }

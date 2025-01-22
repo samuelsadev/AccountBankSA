@@ -18,12 +18,12 @@ public class AccountService {
     public Account deposit(AccountDTO accountDTO, Long id) {
 
         if (accountDTO.balance() <= 0) {
-            throw new IllegalArgumentException("O valor do depósito deve ser positivo.");
+            throw new IllegalArgumentException("The deposit amount cannot be negative");
         }
 
         Account account = accountRepository.findById(id)
                 .filter(Account::isActive)
-                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada ou inativa."));
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         account.setBalance(account.getBalance() + accountDTO.balance());
         return accountRepository.save(account);
@@ -32,10 +32,10 @@ public class AccountService {
     public Account withdraw(Long id, AccountDTO accountDTO) {
         Account account = accountRepository.findById(id)
                 .filter(Account::isActive)
-                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada ou inativa."));
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
         if (account.getBalance() < accountDTO.balance()) {
-            throw new IllegalArgumentException("Saldo insuficiente.");
+            throw new IllegalArgumentException("Amount not enough");
         }
 
         account.setBalance(account.getBalance() - accountDTO.balance());

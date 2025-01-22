@@ -21,7 +21,7 @@ public class AccountController {
     @GetMapping("/{id}")
     public Account viewAccount(@PathVariable Long id) {
         return accountService.searchById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Conta não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
     }
 
     @PostMapping("/deposit/{id}")

@@ -65,7 +65,7 @@ public class UserService {
 
                     return userRepository.save(user);
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
 
@@ -78,10 +78,10 @@ public class UserService {
         }
 
         User user = userOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou password inválidos"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou password invalid"));
 
         if (!passwordEncoder.matches(userDTO.password(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou password inválidos");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email, CPF ou password invalid");
         }
 
         String token = jwtService.generateToken(user.getEmail());

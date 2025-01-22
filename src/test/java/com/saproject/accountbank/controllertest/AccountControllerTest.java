@@ -101,7 +101,7 @@ class AccountControllerTest {
     @Test
     void testWithdrawEnoughBalance() throws Exception {
         AccountDTO contaDTO = new AccountDTO(2000.0);
-        when(accountService.withdraw(1L, contaDTO)).thenThrow(new IllegalArgumentException("Saldo insuficiente"));
+        when(accountService.withdraw(1L, contaDTO)).thenThrow(new IllegalArgumentException("Insufficient balance"));
         mockMvc.perform(post("/account/withdraw/{id}", 1L)
                         .param("balance", "2000.0"))
                 .andExpect(status().isBadRequest())
