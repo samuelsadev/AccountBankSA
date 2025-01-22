@@ -1,6 +1,7 @@
 package com.saproject.accountbank.controller;
 
 import com.saproject.accountbank.dto.AccountDTO;
+import com.saproject.accountbank.dto.TransactionDTO;
 import com.saproject.accountbank.model.Account;
 import com.saproject.accountbank.model.Account.accountType;
 import com.saproject.accountbank.service.AccountService;
@@ -46,4 +47,16 @@ public class AccountController {
     public Account accountType(@PathVariable Long id, @RequestBody accountType accountType) {
         return accountService.changeAccountType(id, accountType).orElseThrow();
     }
+
+    @PostMapping("/transaction")
+    public ResponseEntity<String> processTransaction(@RequestBody TransactionDTO transactionDTO) {
+        accountService.processTransaction(transactionDTO);
+        return ResponseEntity.ok("Transaction processed successfully.");
+    }
+
+    @PutMapping("/update/{accountNumber}")
+    public void updateAccountBalance(@PathVariable String accountNumber, @RequestBody AccountDTO accountDTO) {
+        accountService.updateAccountBalance(accountNumber, accountDTO);
+    }
+
 }
