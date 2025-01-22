@@ -15,15 +15,15 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<User> usuario = usuarioRepository.findByEmail(username);
+        Optional<User> usuario = userRepository.findByEmail(username);
 
         if (!usuario.isPresent()) {
-            usuario = usuarioRepository.findByCpf(username);
+            usuario = userRepository.findByCpf(username);
         }
 
         if (usuario.isPresent()) {
